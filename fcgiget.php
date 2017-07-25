@@ -55,12 +55,12 @@ if (isset($url['query'])) {
 }
 if ($sock) {
     $client = new Client("unix://$sock", -1);
-    echo "Call: $uri on UDS $sock\n\n";
+    //echo "Call: $uri on UDS $sock\n\n";
 } else {
     $host = (isset($url['host']) ? $url['host'] : 'localhost');
     $port = (isset($url['port']) ? $url['port'] : 9000);
     $client = new Client($host, $port);
-    echo "Call: $uri on $host:$port\n\n";
+    //echo "Call: $uri on $host:$port\n\n";
 }
 
 $params = array(
@@ -69,14 +69,15 @@ $params = array(
 		'SCRIPT_FILENAME'   => $url['path'],
 		'SCRIPT_NAME'       => $req,
 		'QUERY_STRING'      => $url['query'],
-		'REQUEST_URI'       => $uri,
+		'REQUEST_URI'       => getenv('REQUEST_URI') ?: '/',
 		'DOCUMENT_URI'      => $req,
+	        'DOCUMENT_ROOT'     => dirname($url['path']).'/',
 		'SERVER_SOFTWARE'   => 'php/fcgiclient',
 		'REMOTE_ADDR'       => '127.0.0.1',
 		'REMOTE_PORT'       => '9985',
 		'SERVER_ADDR'       => '127.0.0.1',
 		'SERVER_PORT'       => '80',
-		'SERVER_NAME'       => php_uname('n'),
+		'SERVER_NAME'       => getenv('SERVER_NAME') ?: php_uname('n'),
 		'SERVER_PROTOCOL'   => 'HTTP/1.1',
 		'CONTENT_TYPE'      => '',
 		'CONTENT_LENGTH'    => 0
