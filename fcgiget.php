@@ -83,5 +83,13 @@ $params = array(
 		'CONTENT_LENGTH'    => 0
 );
 //print_r($params);
-echo $client->request($params, false)."\n";
+//echo $client->request($params, false)."\n";
+
+$fresponse = $client->request($params, false);
+$pos2 = stripos($fresponse, '<title>');
+$pos1 = stripos($fresponse, 'status:');
+$flen = strlen($fresponse);
+if ($pos2 === false || $pos1 !== false || $flen < 4096) {
+ exit(1);
+}
 
